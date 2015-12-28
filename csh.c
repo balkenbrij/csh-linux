@@ -37,6 +37,7 @@
 #include <errno.h>
 #include <pwd.h>
 #include <stdlib.h>
+#include <bsdstring.h>
 #include <string.h>
 #include <locale.h>
 #include <unistd.h>
