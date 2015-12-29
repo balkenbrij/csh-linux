@@ -6,18 +6,19 @@
 # To profile, put -DPROF in DEFS and -pg in CFLAGS, and recompile.
 
 PROG=	csh
-DFLAGS=-DBUILTIN -DFILEC -DNLS -DSHORT_STRINGS
-DFLAGS+=-D_GNU_SOURCE
-#CFLAGS+=-g
-#CFLAGS+=-Wall
+DFLAGS=-D_GNU_SOURCE
 CFLAGS+= -Os -march=native -flto -pipe -I. ${DFLAGS}
 OBJS=	alloc.o char.o const.o csh.o dir.o dol.o error.o exec.o exp.o file.o \
 	func.o glob.o hist.o init.o lex.o misc.o parse.o proc.o \
 	sem.o set.o str.o time.o vis.o strlcpy.o strtonum.o reallocarray.o
-#LDADD+=	-lbsd
 
 $(PROG):	const.h error.h $(OBJS)
 	$(CC) -o $(PROG) $(OBJS)
+	strip -s -R .note -R .comment csh
+	size csh
+
+install:
+	install -o root -g root -m 555 csh /bin/csh
 
 %.o:	%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
