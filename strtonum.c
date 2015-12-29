@@ -1,4 +1,6 @@
-/*-
+/*	$OpenBSD: strtonum.c,v 1.8 2015/09/13 08:31:48 guenther Exp $	*/
+
+/*
  * Copyright (c) 2004 Ted Unangst and Todd Miller
  * All rights reserved.
  *
@@ -13,27 +15,23 @@
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- *
- *	$OpenBSD: strtonum.c,v 1.6 2004/08/03 19:38:01 millert Exp $
  */
-
-#include <sys/cdefs.h>
 
 #include <errno.h>
 #include <limits.h>
 #include <stdlib.h>
 
-#define INVALID 	1
-#define TOOSMALL 	2
-#define TOOLARGE 	3
+#define	INVALID		1
+#define	TOOSMALL	2
+#define	TOOLARGE	3
 
 long long
 strtonum(const char *numstr, long long minval, long long maxval,
     const char **errstrp)
 {
 	long long ll = 0;
-	char *ep;
 	int error = 0;
+	char *ep;
 	struct errval {
 		const char *errstr;
 		int err;
@@ -46,11 +44,11 @@ strtonum(const char *numstr, long long minval, long long maxval,
 
 	ev[0].err = errno;
 	errno = 0;
-	if (minval > maxval)
+	if (minval > maxval) {
 		error = INVALID;
-	else {
+	} else {
 		ll = strtoll(numstr, &ep, 10);
-		if (errno == EINVAL || numstr == ep || *ep != '\0')
+		if (numstr == ep || *ep != '\0')
 			error = INVALID;
 		else if ((ll == LLONG_MIN && errno == ERANGE) || ll < minval)
 			error = TOOSMALL;

@@ -1,6 +1,9 @@
+/*	$OpenBSD: vis.h,v 1.15 2015/07/20 01:52:27 millert Exp $	*/
+/*	$NetBSD: vis.h,v 1.4 1994/10/26 00:56:41 cgd Exp $	*/
+
 /*-
- * Copyright (c) 1990, 1993
- *	The Regents of the University of California.  All rights reserved.
+ * Copyright (c) 1990 The Regents of the University of California.
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -26,14 +29,11 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- *	@(#)vis.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: src/include/vis.h,v 1.11 2003/10/30 10:40:49 phk Exp $
+ *	@(#)vis.h	5.9 (Berkeley) 4/3/91
  */
 
 #ifndef _VIS_H_
 #define	_VIS_H_
-
-#include <sys/types.h>
 
 /*
  * to select alternate encoding format
@@ -50,13 +50,14 @@
 #define	VIS_NL		0x10	/* also encode newline */
 #define	VIS_WHITE	(VIS_SP | VIS_TAB | VIS_NL)
 #define	VIS_SAFE	0x20	/* only encode "unsafe" characters */
+#define	VIS_DQ		0x200	/* backslash-escape double quotes */
+#define	VIS_ALL		0x400	/* encode all characters */
 
 /*
  * other
  */
 #define	VIS_NOSLASH	0x40	/* inhibit printing '\' */
-#define	VIS_HTTPSTYLE	0x80	/* http-style escape % HEX HEX */
-#define	VIS_GLOB	0x100	/* encode glob(3) magics */
+#define	VIS_GLOB	0x100	/* encode glob(3) magics and '#' */
 
 /*
  * unvis return codes
@@ -77,12 +78,13 @@
 __BEGIN_DECLS
 char	*vis(char *, int, int, int);
 int	strvis(char *, const char *, int);
-int	strvisx(char *, const char *, size_t, int);
+int	stravis(char **, const char *, int);
 int	strnvis(char *, const char *, size_t, int);
+int	strvisx(char *, const char *, size_t, int);
 int	strunvis(char *, const char *);
-int	strunvisx(char *, const char *, int);
+int	unvis(char *, char, int *, int);
 ssize_t strnunvis(char *, const char *, size_t);
-int	unvis(char *, int, int *, int);
+
 __END_DECLS
 
 #endif /* !_VIS_H_ */
