@@ -49,6 +49,7 @@ extern const char *const sys_sigabbrev[];
 #include "dir.h"
 #include "proc.h"
 #include "extern.h"
+#include "strtonum.h"
 
 #define BIGINDEX	9	/* largest desirable job index */
 
